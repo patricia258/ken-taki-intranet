@@ -57,13 +57,13 @@ import { supabase } from "@/lib/supabase";
 export const Route = createFileRoute("/gestor")({
   head: () => ({
     meta: [
-      { title: "Painel do gestor · Portal Azumi RH" },
+      { title: "Painel do gestor · Portal Cali RH" },
       {
         name: "description",
         content:
           "Área do gestor Ken Taki: clima da equipe, assinaturas de políticas, feedbacks, sugestões e solicitação de vaga.",
       },
-      { property: "og:title", content: "Painel do gestor · Portal Azumi RH" },
+      { property: "og:title", content: "Painel do gestor · Portal Cali RH" },
       {
         property: "og:description",
         content: "Clima, políticas e equipe da sua unidade em um só lugar.",
@@ -562,7 +562,7 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
             👋 Olá, {session.nome.split(" ")[0]}!
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Bem-vindo(a) à intranet do Ken Taki × Azumi RH
+            Bem-vindo(a) à intranet do Ken Taki × Cali RH
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             Gestor(a) · unidade{" "}
@@ -593,12 +593,12 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
             <Briefcase className="h-5 w-5 shrink-0" />
             <div>
               <p className="font-bold">Solicitar vaga</p>
-              <p className="text-xs font-normal opacity-80">Abrir portal de vagas Azumi RH</p>
+              <p className="text-xs font-normal opacity-80">Abrir portal de vagas Cali RH</p>
             </div>
           </a>
 
           <a
-            href={`https://wa.me/${AZUMI_CONTACT.whatsapp}?text=${encodeURIComponent(`Olá, sou ${session.nome}, gestor(a) da unidade ${filialNome(session.filial)}. Gostaria de falar com o consultor Azumi RH.`)}`}
+            href={`https://wa.me/${AZUMI_CONTACT.whatsapp}?text=${encodeURIComponent(`Olá, sou ${session.nome}, gestor(a) da unidade ${filialNome(session.filial)}. Gostaria de falar com o consultor Cali RH.`)}`}
             target="_blank"
             rel="noreferrer"
             onClick={() =>
@@ -617,7 +617,7 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           >
             <MessageCircle className="h-5 w-5 shrink-0 text-success" />
             <div>
-              <p className="font-bold">Fale com o consultor Azumi</p>
+              <p className="font-bold">Fale com o consultor Cali RH</p>
               <p className="text-xs text-muted-foreground">
                 {AZUMI_CONTACT.whatsappLabel} · WhatsApp
               </p>
@@ -1303,7 +1303,7 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
         <Section
           id="enviar-sugestao"
           titulo="Enviar sugestão"
-          intro="Envie uma sugestão anonimamente para a Azumi RH ou para os sócios."
+          intro="Envie uma sugestão anonimamente para a Cali RH ou para os sócios."
           contagem="Anônima"
           collapsible
         >
@@ -1374,7 +1374,7 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
         <Section
           id="sugestoes"
           titulo="Caixinha de sugestão"
-          intro="Sugestões anônimas do time desta unidade (exceto as dirigidas à equipe Azumi RH)."
+          intro="Sugestões anônimas do time desta unidade (exceto as dirigidas à equipe Cali RH)."
           contagem={`${sugestoesDaUnidade.length} sugestões`}
           collapsible
         >
@@ -1480,7 +1480,7 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
         <Section
           id="pesquisa-clima"
           titulo="Pesquisa de clima"
-          intro="Pesquisas publicadas pela Azumi RH aparecem aqui e no painel do time."
+          intro="Pesquisas publicadas pela Cali RH aparecem aqui e no painel do time."
           contagem={pesquisa?.ativa ? "1 ativa" : "Nenhuma ativa"}
           collapsible
         >

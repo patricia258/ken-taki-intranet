@@ -106,13 +106,13 @@ function rowParaColaborador(row: Record<string, string>): Colaborador | null {
 export const Route = createFileRoute("/azumi")({
   head: () => ({
     meta: [
-      { title: "Área Azumi RH · Portal Azumi RH" },
+      { title: "Área RH · Portal Cali RH" },
       {
         name: "description",
         content:
-          "Área da Azumi RH: publicar mural e notícias em vídeo, abrir pesquisas de clima e acompanhar as unidades Ken Taki.",
+          "Área do RH: publicar mural e notícias em vídeo, abrir pesquisas de clima e acompanhar as unidades Ken Taki.",
       },
-      { property: "og:title", content: "Área Azumi RH · Portal Azumi RH" },
+      { property: "og:title", content: "Área RH · Portal Cali RH" },
       {
         property: "og:description",
         content: "Visão consolidada das unidades Cristo Rei e Champagnat.",
@@ -221,9 +221,9 @@ function LoginAzumi({
   return (
     <AppShell back={<BackLink onClick={() => navigate({ to: "/" })}>voltar ao início</BackLink>}>
       <div className="surface mx-auto w-full max-w-md p-6 sm:p-8">
-        <h1 className="text-2xl font-extrabold">Área Azumi RH</h1>
+        <h1 className="text-2xl font-extrabold">Área RH</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Acesse com seu e-mail e senha da equipe Azumi.
+          Acesse com seu e-mail e senha da equipe Cali RH.
         </p>
         <div className="mt-6 grid gap-4">
           <div className="grid gap-2">
@@ -696,7 +696,7 @@ function PainelAzumi({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => v
             👋 Olá, {perfil.nome.split(" ")[0]}!
           </h1>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Bem-vinda à intranet do Ken Taki × Azumi RH
+            Bem-vinda à intranet do Ken Taki × Cali RH
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             Visão consolidada · Cristo Rei e Champagnat
@@ -1864,7 +1864,7 @@ function PainelAzumi({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => v
               const destinoOk =
                 fbFiltroDestino === "Todos" ||
                 (fbFiltroDestino === "Gestor" && f.destino !== "azumi") ||
-                (fbFiltroDestino === "Azumi" && f.destino === "azumi");
+                (fbFiltroDestino === "Cali RH" && f.destino === "azumi");
               return filialOk && destinoOk;
             })
             .sort((a, b) => b.ts - a.ts);
@@ -1873,7 +1873,7 @@ function PainelAzumi({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => v
             <Section
               id="feedbacks"
               titulo="Feedbacks"
-              intro="Todos os feedbacks enviados — Azumi vê tudo, independente do destino."
+              intro="Todos os feedbacks enviados — a Cali RH vê tudo, independente do destino."
               contagem={`${feedbacks.length} total${novos > 0 ? ` · ${novos} sem status` : ""}`}
               collapsible
               defaultOpen={feedbacks.length > 0}
@@ -1897,7 +1897,7 @@ function PainelAzumi({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => v
                       </button>
                     ))}
                     <span className="h-6 w-px bg-border" />
-                    {["Todos", "Gestor", "Azumi"].map((d) => (
+                    {["Todos", "Gestor", "Cali RH"].map((d) => (
                       <button
                         key={d}
                         onClick={() => setFbFiltroDestino(d)}
@@ -1956,7 +1956,7 @@ function PainelAzumi({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => v
                                       : "bg-kt-soft text-kt"
                                   }`}
                                 >
-                                  {f.destino === "azumi" ? "Azumi" : "Gestor"}
+                                  {f.destino === "azumi" ? "Cali RH" : "Gestor"}
                                 </span>
                               </td>
                               <td className="max-w-xs px-4 py-3 text-muted-foreground">

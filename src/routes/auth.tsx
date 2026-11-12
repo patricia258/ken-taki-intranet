@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
-    meta: [{ title: "Criar nova senha · Portal Azumi RH" }],
+    meta: [{ title: "Criar nova senha · Portal Cali RH" }],
   }),
   component: AuthPage,
 });
@@ -79,7 +79,7 @@ function AuthPage() {
               <Link to="/gestor">Login do gestor</Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full">
-              <Link to="/azumi">Login da Azumi</Link>
+              <Link to="/azumi">Login do RH</Link>
             </Button>
           </div>
         </div>
