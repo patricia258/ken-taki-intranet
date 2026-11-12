@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Laptop, Smartphone, Sparkles } from "lucide-react";
-import { notificarAcessoDemoFn } from "@/lib/demo-track-fns";
+import { notificarAcessoDemoFn, notificarSaidaDemoFn } from "@/lib/demo-track-fns";
 
 export const Route = createFileRoute("/demo")({
   head: () => ({
@@ -39,10 +39,34 @@ function DemoShowcase() {
   const [device, setDevice] = useState<Device>("celular");
   const src = `/demo-login?role=${role}`;
 
+  const entradaRef = useRef<number>(Date.now());
+  const roleRef = useRef(role);
+  roleRef.current = role;
+  const saidaAvisadaRef = useRef(false);
+
   useEffect(() => {
-    void notificarAcessoDemoFn({
-      data: { role, path: typeof window !== "undefined" ? window.location.href : "/demo" },
-    }).catch(() => undefined);
+    void notificarAcessoDemoFn({ data: { role } }).catch(() => undefined);
+
+    const avisarSaida = () => {
+      if (saidaAvisadaRef.current) return;
+      const durationSeconds = Math.round((Date.now() - entradaRef.current) / 1000);
+      if (durationSeconds < 3) return;
+      saidaAvisadaRef.current = true;
+      void notificarSaidaDemoFn({
+        data: { role: roleRef.current, durationSeconds },
+      }).catch(() => undefined);
+    };
+
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") avisarSaida();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", avisarSaida);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", avisarSaida);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
