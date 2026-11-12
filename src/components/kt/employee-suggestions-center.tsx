@@ -91,7 +91,6 @@ export function EmployeeSuggestionsCenter() {
       intro="Sua identidade não é exibida para RH ou gestão. Você continua acompanhando o protocolo e a devolutiva por aqui."
       contagem={`${rows.length} protocolos`}
       collapsible
-      defaultOpen
     >
       <div className="grid gap-5">
         <div className="rounded-lg border border-kt/20 bg-kt-soft/35 p-4">

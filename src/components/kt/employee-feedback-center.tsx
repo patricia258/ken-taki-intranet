@@ -231,7 +231,6 @@ export function EmployeeFeedbackCenter() {
       intro="Registre elogios, dúvidas ou situações que precisam de acompanhamento. O RH acompanha todos os registros; relatos sensíveis passam primeiro por triagem."
       contagem={`${history.length} registros`}
       collapsible
-      defaultOpen
     >
       <div className="grid gap-5">
         <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">

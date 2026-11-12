@@ -1,10 +1,4 @@
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  type ReactElement,
-  type ReactNode,
-} from "react";
+import { Children, cloneElement, isValidElement, type ReactElement, type ReactNode } from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 import { iniciais } from "@/lib/kt-data";
@@ -43,7 +37,7 @@ export function Section({
   acao,
   children,
   collapsible = false,
-  defaultOpen = true,
+  defaultOpen = false,
 }: {
   id?: string;
   titulo: string;
@@ -60,10 +54,14 @@ export function Section({
   const header = (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div className="min-w-0 flex-1">
-        <h2 className="text-base font-bold leading-tight text-foreground sm:text-lg">{displayTitle}</h2>
-        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">{displayIntro}</p>
+        <h2 className="text-base font-bold leading-tight text-foreground sm:text-lg">
+          {displayTitle}
+        </h2>
+        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          {displayIntro}
+        </p>
       </div>
-      {(contagem || acao) ? (
+      {contagem || acao ? (
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           {contagem ? (
             <span className="rounded-md border border-border bg-muted px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
@@ -79,7 +77,9 @@ export function Section({
   if (!collapsible) {
     return (
       <section id={id} className="surface scroll-mt-24 overflow-hidden">
-        <header className="border-b border-border bg-card px-4 py-4 sm:px-5 lg:px-6">{header}</header>
+        <header className="border-b border-border bg-card px-4 py-4 sm:px-5 lg:px-6">
+          {header}
+        </header>
         <div className="px-4 py-4 sm:px-5 sm:py-5 lg:px-6">{displayChildren}</div>
       </section>
     );
@@ -97,12 +97,16 @@ export function Section({
             <div className="flex items-start gap-3">
               <AccordionPrimitive.Trigger className="flex min-w-0 flex-1 cursor-pointer items-start gap-3 text-left [&[data-state=open]>svg]:rotate-180">
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-base font-bold leading-tight text-foreground sm:text-lg">{displayTitle}</h2>
-                  <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">{displayIntro}</p>
+                  <h2 className="text-base font-bold leading-tight text-foreground sm:text-lg">
+                    {displayTitle}
+                  </h2>
+                  <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                    {displayIntro}
+                  </p>
                 </div>
                 <ChevronDown className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200" />
               </AccordionPrimitive.Trigger>
-              {(contagem || acao) ? (
+              {contagem || acao ? (
                 <div className="hidden shrink-0 items-center gap-2 sm:flex">
                   {contagem ? (
                     <span className="rounded-md border border-border bg-muted px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">

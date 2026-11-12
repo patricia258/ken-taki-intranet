@@ -664,7 +664,7 @@ export function EmployeeDashboardV3() {
         )}
       </SectionBlock>
 
-      <Documentos session={session} defaultOpen />
+      <Documentos session={session} />
 
       <SectionBlock
         id="reconhecimentos"

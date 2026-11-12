@@ -1,10 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Laptop, Smartphone, Sparkles } from "lucide-react";
+import { notificarAcessoDemoFn } from "@/lib/demo-track-fns";
 
 export const Route = createFileRoute("/demo")({
   head: () => ({
-    meta: [{ title: "Demonstração · Intranet Ken Taki" }],
+    meta: [
+      { title: "Demonstração · Intranet Ken Taki" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
   }),
   component: DemoShowcase,
 });
@@ -34,6 +38,13 @@ function DemoShowcase() {
   const [role, setRole] = useState<Role>("colaborador");
   const [device, setDevice] = useState<Device>("celular");
   const src = `/demo-login?role=${role}`;
+
+  useEffect(() => {
+    void notificarAcessoDemoFn({
+      data: { role, path: typeof window !== "undefined" ? window.location.href : "/demo" },
+    }).catch(() => undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-[100dvh] bg-[#fbf7f4]">

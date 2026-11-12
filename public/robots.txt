@@ -1,14 +1,24 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /demo
+Disallow: /demo-login
 
 User-agent: Bingbot
 Allow: /
+Disallow: /demo
+Disallow: /demo-login
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /demo
+Disallow: /demo-login
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /demo
+Disallow: /demo-login
 
 User-agent: *
 Allow: /
+Disallow: /demo
+Disallow: /demo-login

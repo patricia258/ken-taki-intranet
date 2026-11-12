@@ -632,7 +632,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Como o time respondeu ao check-in diário nesta unidade."
           contagem={`${meusCheckins.length} respostas`}
           collapsible
-          defaultOpen={meusCheckins.length > 0}
         >
           <div className="grid gap-5">
             {/* Emoji totais */}
@@ -807,7 +806,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Documentos publicados para esta unidade. Você também pode assinar como gestor(a)."
           contagem={`${docsFilial.length} documentos`}
           collapsible
-          defaultOpen={docsFilial.length > 0}
         >
           {docsFilial.length === 0 ? (
             <EmptyState>Nenhum documento publicado para esta unidade ainda.</EmptyState>
@@ -1052,7 +1050,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Elogios, críticas, dúvidas e situações registradas pelo time."
           contagem={`${feedbacksGestor.length} recebidos`}
           collapsible
-          defaultOpen={feedbacksGestor.length > 0}
         >
           {feedbacksGestor.length === 0 ? (
             <EmptyState>Nenhum feedback recebido ainda.</EmptyState>
@@ -1309,7 +1306,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Envie uma sugestão anonimamente para a Azumi RH ou para os sócios."
           contagem="Anônima"
           collapsible
-          defaultOpen={false}
         >
           <div className="grid gap-4">
             <p className="text-sm text-muted-foreground">
@@ -1381,7 +1377,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Sugestões anônimas do time desta unidade (exceto as dirigidas à equipe Azumi RH)."
           contagem={`${sugestoesDaUnidade.length} sugestões`}
           collapsible
-          defaultOpen={sugestoesDaUnidade.length > 0}
         >
           {sugestoesDaUnidade.length === 0 ? (
             <EmptyState>Nenhuma sugestão registrada ainda.</EmptyState>
@@ -1488,7 +1483,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Pesquisas publicadas pela Azumi RH aparecem aqui e no painel do time."
           contagem={pesquisa?.ativa ? "1 ativa" : "Nenhuma ativa"}
           collapsible
-          defaultOpen={!!pesquisa?.ativa}
         >
           {pesquisa?.ativa ? (
             <div className="grid gap-4">
@@ -1630,7 +1624,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           filial={session.filial}
           autorPadrao={`${session.nome} (gestão)`}
           collapsible
-          defaultOpen
         />
 
         <Section
@@ -1639,7 +1632,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
           intro="Time cadastrado nesta unidade."
           contagem={`${equipe.length} pessoas`}
           collapsible
-          defaultOpen={equipe.length > 0}
           acao={
             <Dialog
               open={cadastrarOpen}

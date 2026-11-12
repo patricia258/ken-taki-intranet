@@ -18,6 +18,9 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/demo-login")({
   validateSearch: searchSchema,
+  head: () => ({
+    meta: [{ name: "robots", content: "noindex, nofollow" }],
+  }),
   component: DemoLogin,
 });
 

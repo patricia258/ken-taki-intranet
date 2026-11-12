@@ -181,8 +181,8 @@ function WorkspaceNav({ items }: { items: WorkspaceItem[] }) {
         </div>
       </div>
 
-      <aside className="hidden lg:block">
-        <div className="sticky top-24 overflow-hidden rounded-lg border border-sidebar-border bg-sidebar text-sidebar-foreground shadow-sm">
+      <aside className="hidden self-start lg:block">
+        <div className="overflow-hidden rounded-lg border border-sidebar-border bg-sidebar text-sidebar-foreground shadow-sm">
           <div className="border-b border-sidebar-border px-4 py-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/55">Menu rápido</p>
             <p className="mt-1 text-[11px] leading-relaxed text-sidebar-foreground/70">Navegue por conteúdo e pendências sem perder seu contexto.</p>

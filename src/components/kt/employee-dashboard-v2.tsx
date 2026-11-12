@@ -809,7 +809,7 @@ export function EmployeeDashboardV2() {
       </SectionBlock>
 
       <div id="politicas" className="scroll-mt-24">
-        <Documentos session={session} defaultOpen />
+        <Documentos session={session} />
       </div>
 
       <SectionBlock
