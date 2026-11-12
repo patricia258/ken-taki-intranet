@@ -20,7 +20,8 @@ import { filialNome } from "@/lib/kt-data";
 import { supabase } from "@/lib/supabase";
 import { uid, useSession } from "@/lib/kt-store";
 
-type FeedbackType = "Elogio" | "Dúvida" | "Crítica" | "Reclamação" | "Denúncia" | "Situação urgente";
+type FeedbackType =
+  "Elogio" | "Dúvida" | "Crítica" | "Reclamação" | "Denúncia" | "Situação urgente";
 type RecipientType = "gestor" | "colaborador" | "rh" | "outro";
 
 type DirectoryRow = { id: string; nome: string; cargo: string; filial: string };
@@ -45,50 +46,51 @@ type HistoryRow = {
   protocolo: string | null;
 };
 
-const TYPES: Array<{ id: FeedbackType; emoji: string; title: string; body: string; tone: string }> = [
-  {
-    id: "Elogio",
-    emoji: "💚",
-    title: "Reconhecer algo bom",
-    body: "Que bom reconhecer outra pessoa. Um elogio claro ajuda a reforçar o que funciona bem.",
-    tone: "border-success/30 bg-success-soft/55 text-success",
-  },
-  {
-    id: "Dúvida",
-    emoji: "❓",
-    title: "Uma pergunta ainda sem resposta",
-    body: "Escolha se sua dúvida deve ir primeiro para a liderança ou para o RH.",
-    tone: "border-warn/30 bg-warn-soft/60 text-warn",
-  },
-  {
-    id: "Crítica",
-    emoji: "🟠",
-    title: "Algo pode melhorar",
-    body: "Críticas construtivas são bem-vindas. O RH acompanha este tipo de registro para preservar contexto e continuidade.",
-    tone: "border-orange-300 bg-orange-50 text-orange-700",
-  },
-  {
-    id: "Reclamação",
-    emoji: "⚠️",
-    title: "Houve uma situação que precisa ser analisada",
-    body: "Registre o que aconteceu, quando ocorreu e quem estava envolvido. O RH recebe primeiro para avaliar o contexto.",
-    tone: "border-destructive/25 bg-destructive/5 text-destructive",
-  },
-  {
-    id: "Denúncia",
-    emoji: "🛡️",
-    title: "Relato sensível",
-    body: "Inclua o máximo de informações úteis: data, situação, pessoas envolvidas e testemunhas, se houver. O RH faz a triagem antes de envolver a gestão.",
-    tone: "border-destructive/35 bg-destructive/7 text-destructive",
-  },
-  {
-    id: "Situação urgente",
-    emoji: "🚨",
-    title: "Precisa de atenção rápida",
-    body: "Descreva o que aconteceu com clareza. O RH é avisado imediatamente e decide o envolvimento da liderança conforme o caso.",
-    tone: "border-destructive/40 bg-destructive/10 text-destructive",
-  },
-];
+const TYPES: Array<{ id: FeedbackType; emoji: string; title: string; body: string; tone: string }> =
+  [
+    {
+      id: "Elogio",
+      emoji: "💚",
+      title: "Reconhecer algo bom",
+      body: "Que bom reconhecer outra pessoa. Um elogio claro ajuda a reforçar o que funciona bem.",
+      tone: "border-success/30 bg-success-soft/55 text-success",
+    },
+    {
+      id: "Dúvida",
+      emoji: "❓",
+      title: "Uma pergunta ainda sem resposta",
+      body: "Escolha se sua dúvida deve ir primeiro para a liderança ou para o RH.",
+      tone: "border-warn/30 bg-warn-soft/60 text-warn",
+    },
+    {
+      id: "Crítica",
+      emoji: "🟠",
+      title: "Algo pode melhorar",
+      body: "Críticas construtivas são bem-vindas. O RH acompanha este tipo de registro para preservar contexto e continuidade.",
+      tone: "border-orange-300 bg-orange-50 text-orange-700",
+    },
+    {
+      id: "Reclamação",
+      emoji: "⚠️",
+      title: "Houve uma situação que precisa ser analisada",
+      body: "Registre o que aconteceu, quando ocorreu e quem estava envolvido. O RH recebe primeiro para avaliar o contexto.",
+      tone: "border-destructive/25 bg-destructive/5 text-destructive",
+    },
+    {
+      id: "Denúncia",
+      emoji: "🛡️",
+      title: "Relato sensível",
+      body: "Inclua o máximo de informações úteis: data, situação, pessoas envolvidas e testemunhas, se houver. O RH faz a triagem antes de envolver a gestão.",
+      tone: "border-destructive/35 bg-destructive/7 text-destructive",
+    },
+    {
+      id: "Situação urgente",
+      emoji: "🚨",
+      title: "Precisa de atenção rápida",
+      body: "Descreva o que aconteceu com clareza. O RH é avisado imediatamente e decide o envolvimento da liderança conforme o caso.",
+      tone: "border-destructive/40 bg-destructive/10 text-destructive",
+    },
+  ];
 
 function isSensitive(type: FeedbackType) {
   return ["Crítica", "Reclamação", "Denúncia", "Situação urgente"].includes(type);
@@ -129,7 +131,9 @@ export function EmployeeFeedbackCenter() {
     setLoading(true);
     const { data, error } = await supabase
       .from("kt_feedbacks")
-      .select("id,tipo,mensagem,anonimo,ts,status,destino,triagem_rh_status,gestor_liberado,comentario_gestor,proxima_acao,encerrado_motivo,destinatario_tipo,destinatario_nome,destinatario_filial,fato_em,testemunhas,protocolo")
+      .select(
+        "id,tipo,mensagem,anonimo,ts,status,destino,triagem_rh_status,gestor_liberado,comentario_gestor,proxima_acao,encerrado_motivo,destinatario_tipo,destinatario_nome,destinatario_filial,fato_em,testemunhas,protocolo",
+      )
       .eq("colaborador_id", access.colaboradorId)
       .order("ts", { ascending: false });
     setLoading(false);
@@ -150,7 +154,8 @@ export function EmployeeFeedbackCenter() {
   }, [history, period]);
 
   const groupedDirectory = useMemo(() => {
-    if (!session || session.tipo !== "colaborador") return { own: [] as DirectoryRow[], other: [] as DirectoryRow[] };
+    if (!session || session.tipo !== "colaborador")
+      return { own: [] as DirectoryRow[], other: [] as DirectoryRow[] };
     return {
       own: directory.filter((item) => item.filial === session.filial),
       other: directory.filter((item) => item.filial !== session.filial),
@@ -159,10 +164,22 @@ export function EmployeeFeedbackCenter() {
 
   const submit = async () => {
     if (!session || session.tipo !== "colaborador") return;
-    if (!message.trim()) { toast.error("Conte o que você quer registrar."); return; }
-    if (sensitive && !factDate) { toast.error("Informe a data em que a situação aconteceu."); return; }
-    if (recipientType === "colaborador" && !recipientId) { toast.error("Selecione para quem é o feedback."); return; }
-    if (recipientType === "outro" && !otherName.trim()) { toast.error("Informe o nome da pessoa ou área."); return; }
+    if (!message.trim()) {
+      toast.error("Conte o que você quer registrar.");
+      return;
+    }
+    if (sensitive && !factDate) {
+      toast.error("Informe a data em que a situação aconteceu.");
+      return;
+    }
+    if (recipientType === "colaborador" && !recipientId) {
+      toast.error("Selecione para quem é o feedback.");
+      return;
+    }
+    if (recipientType === "outro" && !otherName.trim()) {
+      toast.error("Informe o nome da pessoa ou área.");
+      return;
+    }
 
     const target = directory.find((item) => item.id === recipientId);
     setSending(true);
@@ -180,10 +197,10 @@ export function EmployeeFeedbackCenter() {
             ? "RH"
             : recipientType === "outro"
               ? otherName.trim()
-              : target?.nome ?? null,
+              : (target?.nome ?? null),
       p_destinatario_filial:
         recipientType === "colaborador"
-          ? target?.filial ?? session.filial
+          ? (target?.filial ?? session.filial)
           : recipientType === "outro"
             ? otherBranch
             : session.filial,
@@ -201,7 +218,9 @@ export function EmployeeFeedbackCenter() {
     setFactDate("");
     setRecipientId("");
     setAnonymous(false);
-    toast.success(sensitive ? "Relato registrado e encaminhado para triagem do RH." : "Feedback registrado.");
+    toast.success(
+      sensitive ? "Relato registrado e encaminhado para triagem do RH." : "Feedback registrado.",
+    );
     await loadHistory();
   };
 
@@ -215,30 +234,45 @@ export function EmployeeFeedbackCenter() {
       defaultOpen
     >
       <div className="grid gap-5">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">
           {TYPES.map((item) => (
             <button
               key={item.id}
               type="button"
               onClick={() => setType(item.id)}
-              className={`rounded-lg border p-4 text-left transition-all ${type === item.id ? item.tone + " ring-1 ring-current/15" : "border-border bg-card hover:bg-muted/30"}`}
+              className={`min-w-[62%] shrink-0 snap-start rounded-lg border p-4 text-left transition-all sm:min-w-0 sm:shrink ${type === item.id ? item.tone + " ring-1 ring-current/15" : "border-border bg-card hover:bg-muted/30"}`}
             >
-              <span className="text-2xl" aria-hidden>{item.emoji}</span>
+              <span className="text-2xl" aria-hidden>
+                {item.emoji}
+              </span>
               <span className="mt-2 block text-sm font-bold text-foreground">{item.id}</span>
-              <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{item.title}</span>
+              <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                {item.title}
+              </span>
             </button>
           ))}
         </div>
 
         <div className={`rounded-lg border p-4 ${selectedType.tone}`}>
           <div className="flex items-start gap-3">
-            {type === "Elogio" ? <Heart className="mt-0.5 h-5 w-5 shrink-0" /> : type === "Dúvida" ? <CircleHelp className="mt-0.5 h-5 w-5 shrink-0" /> : sensitive ? <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0" /> : <MessageSquareText className="mt-0.5 h-5 w-5 shrink-0" />}
+            {type === "Elogio" ? (
+              <Heart className="mt-0.5 h-5 w-5 shrink-0" />
+            ) : type === "Dúvida" ? (
+              <CircleHelp className="mt-0.5 h-5 w-5 shrink-0" />
+            ) : sensitive ? (
+              <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0" />
+            ) : (
+              <MessageSquareText className="mt-0.5 h-5 w-5 shrink-0" />
+            )}
             <div>
               <p className="text-sm font-bold">{selectedType.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{selectedType.body}</p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                {selectedType.body}
+              </p>
               {sensitive ? (
                 <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-destructive">
-                  <ShieldCheck className="h-3.5 w-3.5" /> O RH participa obrigatoriamente deste fluxo antes de qualquer liberação sensível para a gestão.
+                  <ShieldCheck className="h-3.5 w-3.5" /> O RH participa obrigatoriamente deste
+                  fluxo antes de qualquer liberação sensível para a gestão.
                 </p>
               ) : null}
             </div>
@@ -249,12 +283,14 @@ export function EmployeeFeedbackCenter() {
           <div className="grid gap-2">
             <Label>Para quem é este feedback?</Label>
             <div className="flex flex-wrap gap-2">
-              {([
-                ["colaborador", "Um colaborador"],
-                ["gestor", "Meu gestor"],
-                ["rh", "RH"],
-                ["outro", "Outra pessoa/unidade"],
-              ] as Array<[RecipientType, string]>).map(([value, label]) => (
+              {(
+                [
+                  ["colaborador", "Um colaborador"],
+                  ["gestor", "Meu gestor"],
+                  ["rh", "RH"],
+                  ["outro", "Outra pessoa/unidade"],
+                ] as Array<[RecipientType, string]>
+              ).map(([value, label]) => (
                 <button
                   key={value}
                   type="button"
@@ -276,8 +312,24 @@ export function EmployeeFeedbackCenter() {
                 className="h-11 rounded-md border border-input bg-background px-3 text-sm"
               >
                 <option value="">Selecione...</option>
-                {groupedDirectory.own.length > 0 ? <optgroup label="Minha unidade">{groupedDirectory.own.map((item) => <option key={item.id} value={item.id}>{item.nome}</option>)}</optgroup> : null}
-                {groupedDirectory.other.length > 0 ? <optgroup label="Outras unidades">{groupedDirectory.other.map((item) => <option key={item.id} value={item.id}>{item.nome} · {filialNome(item.filial as never)}</option>)}</optgroup> : null}
+                {groupedDirectory.own.length > 0 ? (
+                  <optgroup label="Minha unidade">
+                    {groupedDirectory.own.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.nome}
+                      </option>
+                    ))}
+                  </optgroup>
+                ) : null}
+                {groupedDirectory.other.length > 0 ? (
+                  <optgroup label="Outras unidades">
+                    {groupedDirectory.other.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.nome} · {filialNome(item.filial as never)}
+                      </option>
+                    ))}
+                  </optgroup>
+                ) : null}
               </select>
             </label>
           ) : null}
@@ -286,11 +338,19 @@ export function EmployeeFeedbackCenter() {
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="grid gap-1.5 text-xs font-semibold text-foreground">
                 Nome da pessoa ou área
-                <Input value={otherName} onChange={(event) => setOtherName(event.target.value)} placeholder="Ex.: João / Financeiro" />
+                <Input
+                  value={otherName}
+                  onChange={(event) => setOtherName(event.target.value)}
+                  placeholder="Ex.: João / Financeiro"
+                />
               </label>
               <label className="grid gap-1.5 text-xs font-semibold text-foreground">
                 Unidade
-                <select value={otherBranch} onChange={(event) => setOtherBranch(event.target.value)} className="h-10 rounded-md border border-input bg-background px-3 text-sm">
+                <select
+                  value={otherBranch}
+                  onChange={(event) => setOtherBranch(event.target.value)}
+                  className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+                >
                   <option value="cristo-rei">Cristo Rei</option>
                   <option value="champagnat">Champagnat</option>
                 </select>
@@ -302,12 +362,20 @@ export function EmployeeFeedbackCenter() {
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="grid gap-1.5 text-xs font-semibold text-foreground">
                 Data da situação <span className="text-destructive">*</span>
-                <Input type="date" value={factDate} onChange={(event) => setFactDate(event.target.value)} />
+                <Input
+                  type="date"
+                  value={factDate}
+                  onChange={(event) => setFactDate(event.target.value)}
+                />
               </label>
-              {(type === "Denúncia" || type === "Reclamação" || type === "Situação urgente") ? (
+              {type === "Denúncia" || type === "Reclamação" || type === "Situação urgente" ? (
                 <label className="grid gap-1.5 text-xs font-semibold text-foreground sm:col-span-2">
                   Testemunhas ou outras pessoas presentes (se houver)
-                  <Input value={witnesses} onChange={(event) => setWitnesses(event.target.value)} placeholder="Nomes ou informações que ajudem na apuração" />
+                  <Input
+                    value={witnesses}
+                    onChange={(event) => setWitnesses(event.target.value)}
+                    placeholder="Nomes ou informações que ajudem na apuração"
+                  />
                 </label>
               ) : null}
             </div>
@@ -320,15 +388,25 @@ export function EmployeeFeedbackCenter() {
               maxLength={1800}
               value={message}
               onChange={(event) => setMessage(event.target.value)}
-              placeholder={sensitive ? "Descreva fatos, contexto, pessoas envolvidas e tudo o que considerar importante..." : "Escreva seu feedback com clareza e contexto..."}
+              placeholder={
+                sensitive
+                  ? "Descreva fatos, contexto, pessoas envolvidas e tudo o que considerar importante..."
+                  : "Escreva seu feedback com clareza e contexto..."
+              }
               className="resize-none"
             />
           </label>
 
           <label className="flex items-start gap-3 rounded-lg border border-border bg-muted/30 p-3 text-xs leading-relaxed text-muted-foreground">
-            <input type="checkbox" checked={anonymous} onChange={(event) => setAnonymous(event.target.checked)} className="mt-0.5" />
+            <input
+              type="checkbox"
+              checked={anonymous}
+              onChange={(event) => setAnonymous(event.target.checked)}
+              className="mt-0.5"
+            />
             <span>
-              <strong className="text-foreground">Enviar sem meu nome para a gestão.</strong> O RH mantém o registro institucional necessário para triagem e continuidade do caso.
+              <strong className="text-foreground">Enviar sem meu nome para a gestão.</strong> O RH
+              mantém o registro institucional necessário para triagem e continuidade do caso.
             </span>
           </label>
 
@@ -343,11 +421,18 @@ export function EmployeeFeedbackCenter() {
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm font-bold text-foreground">Meu histórico</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">Acompanhe status, devolutivas e próximos passos dos seus registros.</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Acompanhe status, devolutivas e próximos passos dos seus registros.
+              </p>
             </div>
             <div className="flex rounded-md border border-border bg-muted/30 p-0.5">
               {(["30", "90", "all"] as const).map((value) => (
-                <button key={value} type="button" onClick={() => setPeriod(value)} className={`rounded px-2.5 py-1.5 text-[11px] font-semibold ${period === value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}>
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setPeriod(value)}
+                  className={`rounded px-2.5 py-1.5 text-[11px] font-semibold ${period === value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
+                >
                   {value === "all" ? "Todos" : `${value} dias`}
                 </button>
               ))}
@@ -355,9 +440,13 @@ export function EmployeeFeedbackCenter() {
           </div>
 
           {loading ? (
-            <div className="rounded-lg border border-border px-4 py-6 text-center text-sm text-muted-foreground">Carregando seus registros...</div>
+            <div className="rounded-lg border border-border px-4 py-6 text-center text-sm text-muted-foreground">
+              Carregando seus registros...
+            </div>
           ) : filteredHistory.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-border px-4 py-7 text-center text-sm text-muted-foreground">Nenhum feedback neste período.</div>
+            <div className="rounded-lg border border-dashed border-border px-4 py-7 text-center text-sm text-muted-foreground">
+              Nenhum feedback neste período.
+            </div>
           ) : (
             <div className="grid gap-3">
               {filteredHistory.map((row) => (
@@ -366,29 +455,64 @@ export function EmployeeFeedbackCenter() {
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm font-bold text-foreground">{row.tipo}</span>
-                        <span className="rounded-full bg-muted px-2 py-1 text-[10px] font-bold text-muted-foreground">{statusLabel(row)}</span>
-                        {row.anonimo ? <span className="rounded-full bg-kt-soft px-2 py-1 text-[10px] font-bold text-kt">Anônimo para gestão</span> : null}
+                        <span className="rounded-full bg-muted px-2 py-1 text-[10px] font-bold text-muted-foreground">
+                          {statusLabel(row)}
+                        </span>
+                        {row.anonimo ? (
+                          <span className="rounded-full bg-kt-soft px-2 py-1 text-[10px] font-bold text-kt">
+                            Anônimo para gestão
+                          </span>
+                        ) : null}
                       </div>
                       <p className="mt-1 text-[11px] text-muted-foreground">
-                        {new Date(row.ts).toLocaleString("pt-BR", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        {new Date(row.ts).toLocaleString("pt-BR", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                         {row.destinatario_nome ? ` · Para ${row.destinatario_nome}` : ""}
                       </p>
                     </div>
-                    <span className="rounded-md bg-muted px-2 py-1 font-mono text-[10px] text-muted-foreground">{row.protocolo ?? row.id.slice(-8).toUpperCase()}</span>
+                    <span className="rounded-md bg-muted px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                      {row.protocolo ?? row.id.slice(-8).toUpperCase()}
+                    </span>
                   </div>
 
-                  {row.fato_em ? <p className="mt-3 text-xs font-semibold text-muted-foreground">Data do fato: {new Date(row.fato_em).toLocaleDateString("pt-BR")}</p> : null}
+                  {row.fato_em ? (
+                    <p className="mt-3 text-xs font-semibold text-muted-foreground">
+                      Data do fato: {new Date(row.fato_em).toLocaleDateString("pt-BR")}
+                    </p>
+                  ) : null}
                   <p className="mt-2 text-sm leading-relaxed text-foreground">{row.mensagem}</p>
 
                   {row.proxima_acao || row.comentario_gestor || row.encerrado_motivo ? (
                     <div className="mt-3 grid gap-2 rounded-md border border-success/20 bg-success-soft/35 p-3">
-                      <p className="flex items-center gap-1.5 text-xs font-bold text-success"><CheckCircle2 className="h-3.5 w-3.5" /> Atualização do caso</p>
-                      {row.proxima_acao ? <p className="text-xs text-muted-foreground"><strong>Próximo passo:</strong> {row.proxima_acao}</p> : null}
-                      {row.comentario_gestor ? <p className="text-xs text-muted-foreground"><strong>Devolutiva:</strong> {row.comentario_gestor}</p> : null}
-                      {row.encerrado_motivo ? <p className="text-xs text-muted-foreground"><strong>Conclusão:</strong> {row.encerrado_motivo}</p> : null}
+                      <p className="flex items-center gap-1.5 text-xs font-bold text-success">
+                        <CheckCircle2 className="h-3.5 w-3.5" /> Atualização do caso
+                      </p>
+                      {row.proxima_acao ? (
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Próximo passo:</strong> {row.proxima_acao}
+                        </p>
+                      ) : null}
+                      {row.comentario_gestor ? (
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Devolutiva:</strong> {row.comentario_gestor}
+                        </p>
+                      ) : null}
+                      {row.encerrado_motivo ? (
+                        <p className="text-xs text-muted-foreground">
+                          <strong>Conclusão:</strong> {row.encerrado_motivo}
+                        </p>
+                      ) : null}
                     </div>
                   ) : (
-                    <p className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground"><AlertTriangle className="h-3.5 w-3.5" /> Ainda não há devolutiva publicada para você.</p>
+                    <p className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                      <AlertTriangle className="h-3.5 w-3.5" /> Ainda não há devolutiva publicada
+                      para você.
+                    </p>
                   )}
                 </article>
               ))}

@@ -46,21 +46,19 @@ export function EmployeeBirthdayFeed() {
     }
 
     let cancelled = false;
-    void supabase
-      .rpc("kt_employee_month_birthdays")
-      .then(({ data, error }) => {
-        if (cancelled) return;
-        if (error) {
-          console.warn("[employee-birthdays] load", error.message);
-          setBirthdays([]);
-          return;
-        }
+    void supabase.rpc("kt_employee_month_birthdays").then(({ data, error }) => {
+      if (cancelled) return;
+      if (error) {
+        console.warn("[employee-birthdays] load", error.message);
+        setBirthdays([]);
+        return;
+      }
 
-        const rows = ((data ?? []) as BirthdayPerson[])
-          .filter((person) => person.filial === session.filial && Boolean(person.nascimento))
-          .sort((a, b) => birthdayDay(b.nascimento) - birthdayDay(a.nascimento));
-        setBirthdays(rows);
-      });
+      const rows = ((data ?? []) as BirthdayPerson[])
+        .filter((person) => person.filial === session.filial && Boolean(person.nascimento))
+        .sort((a, b) => birthdayDay(b.nascimento) - birthdayDay(a.nascimento));
+      setBirthdays(rows);
+    });
 
     return () => {
       cancelled = true;
@@ -96,15 +94,22 @@ export function EmployeeBirthdayFeed() {
   if (!session || session.tipo !== "colaborador" || birthdays.length === 0 || !host) return null;
 
   return createPortal(
-    <section id="aniversariantes" className="mt-6 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <section
+      id="aniversariantes"
+      className="mt-6 overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+    >
       <header className="flex flex-col gap-3 border-b border-border px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex min-w-0 items-start gap-3.5">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-kt-soft text-kt">
             <CakeSlice className="h-5 w-5" />
           </span>
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Celebrações</p>
-            <h2 className="mt-0.5 text-lg font-extrabold tracking-tight text-foreground sm:text-xl">Aniversariantes do mês</h2>
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+              Celebrações
+            </p>
+            <h2 className="mt-0.5 text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
+              Aniversariantes do mês
+            </h2>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
               Celebre quem faz aniversário este mês na unidade {filialNome(session.filial)}.
             </p>
@@ -125,7 +130,9 @@ export function EmployeeBirthdayFeed() {
       <div className="overflow-x-auto overscroll-x-contain px-5 py-5 sm:px-6 sm:py-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex snap-x snap-mandatory gap-3">
           {birthdays.map((person) => {
-            const reactions = messages.filter((item) => item.paraId === person.id && item.mensagem === "__reacao__");
+            const reactions = messages.filter(
+              (item) => item.paraId === person.id && item.mensagem === "__reacao__",
+            );
             const myReaction = reactions.find((item) => item.de === session.nome);
             const congratulations = messages
               .filter((item) => item.paraId === person.id && item.mensagem !== "__reacao__")
@@ -146,11 +153,11 @@ export function EmployeeBirthdayFeed() {
                         src={person.foto}
                         alt={person.nome}
                         loading="lazy"
-                        className="h-28 w-28 rounded-2xl object-cover ring-1 ring-border sm:h-32 sm:w-32"
+                        className="h-20 w-20 rounded-2xl object-cover ring-1 ring-border sm:h-32 sm:w-32"
                       />
                     ) : (
-                      <div className="grid h-28 w-28 place-items-center rounded-2xl bg-card ring-1 ring-border sm:h-32 sm:w-32">
-                        <Avatar nome={person.nome} size={78} />
+                      <div className="grid h-20 w-20 place-items-center rounded-2xl bg-card ring-1 ring-border sm:h-32 sm:w-32">
+                        <Avatar nome={person.nome} size={56} />
                       </div>
                     )}
                   </div>
@@ -158,18 +165,24 @@ export function EmployeeBirthdayFeed() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <p className="truncate text-base font-extrabold text-foreground">🎂 {person.nome.replace(/\s*·\s*DEMO$/i, "")}</p>
-                        <p className="mt-1 text-xl font-black tracking-tight text-kt">{diaMes(person.nascimento)}</p>
+                        <p className="truncate text-base font-extrabold text-foreground">
+                          🎂 {person.nome.replace(/\s*·\s*DEMO$/i, "")}
+                        </p>
+                        <p className="mt-1 text-xl font-black tracking-tight text-kt">
+                          {diaMes(person.nascimento)}
+                        </p>
                         <p className="mt-1 text-sm leading-snug text-muted-foreground">
                           {person.cargo || "Colaborador(a)"} · {filialNome(person.filial)}
                         </p>
                       </div>
                       {isDemoName(person.nome) ? (
-                        <span className="shrink-0 rounded-full bg-kt-soft px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-kt">Demo</span>
+                        <span className="shrink-0 rounded-full bg-kt-soft px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-kt">
+                          Demo
+                        </span>
                       ) : null}
                     </div>
 
-                    <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <div className="mt-4 flex flex-nowrap items-center gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                       {REACTIONS.map((emoji) => {
                         const mine = myReaction?.emoji === emoji;
                         const count = reactions.filter((item) => item.emoji === emoji).length;
@@ -216,8 +229,10 @@ export function EmployeeBirthdayFeed() {
                                 ];
                               });
                             }}
-                            className={`inline-flex min-h-8 items-center gap-1.5 rounded-full border px-2.5 text-xs font-semibold transition-colors disabled:cursor-wait disabled:opacity-60 ${
-                              mine ? "border-kt/30 bg-kt-soft text-kt" : "border-border bg-card text-muted-foreground hover:bg-muted"
+                            className={`inline-flex min-h-8 shrink-0 items-center gap-1 rounded-full border px-2 text-xs font-semibold transition-colors disabled:cursor-wait disabled:opacity-60 ${
+                              mine
+                                ? "border-kt/30 bg-kt-soft text-kt"
+                                : "border-border bg-card text-muted-foreground hover:bg-muted"
                             }`}
                           >
                             <span className="text-base">{emoji}</span>
@@ -235,7 +250,7 @@ export function EmployeeBirthdayFeed() {
                           setMessageText("");
                           setOpenMessagesFor(null);
                         }}
-                        className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-bold text-foreground hover:bg-muted"
+                        className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-kt px-3.5 text-xs font-bold text-white shadow-sm transition-colors hover:brightness-110"
                       >
                         <MessageCircle className="h-3.5 w-3.5" /> Deixar mensagem
                       </button>
@@ -250,7 +265,8 @@ export function EmployeeBirthdayFeed() {
                           }}
                           className="inline-flex min-h-8 items-center rounded-full px-2.5 text-xs font-bold text-kt hover:bg-kt-soft"
                         >
-                          {congratulations.length} {congratulations.length === 1 ? "mensagem" : "mensagens"} de parabéns
+                          {congratulations.length}{" "}
+                          {congratulations.length === 1 ? "mensagem" : "mensagens"} de parabéns
                         </button>
                       ) : null}
                     </div>
@@ -260,9 +276,14 @@ export function EmployeeBirthdayFeed() {
                 {showingMessages ? (
                   <div className="mt-4 grid gap-1.5 border-t border-border pt-3">
                     {congratulations.slice(0, 4).map((item) => (
-                      <div key={item.id} className="rounded-lg bg-muted/45 px-3 py-2 text-xs leading-relaxed">
+                      <div
+                        key={item.id}
+                        className="rounded-lg bg-muted/45 px-3 py-2 text-xs leading-relaxed"
+                      >
                         <strong>{item.de}:</strong>{" "}
-                        <span className="text-muted-foreground">{item.emoji} {item.mensagem}</span>
+                        <span className="text-muted-foreground">
+                          {item.emoji} {item.mensagem}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -285,7 +306,14 @@ export function EmployeeBirthdayFeed() {
                           if (!messageText.trim()) return;
                           setMessages((current) => [
                             ...current,
-                            { id: uid(), paraId: person.id, de: session.nome, emoji: "🎉", mensagem: messageText.trim(), ts: Date.now() },
+                            {
+                              id: uid(),
+                              paraId: person.id,
+                              de: session.nome,
+                              emoji: "🎉",
+                              mensagem: messageText.trim(),
+                              ts: Date.now(),
+                            },
                           ]);
                           setMessageText("");
                           setMessageTarget(null);
@@ -293,7 +321,14 @@ export function EmployeeBirthdayFeed() {
                       >
                         Enviar parabéns
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => { setMessageTarget(null); setMessageText(""); }}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setMessageTarget(null);
+                          setMessageText("");
+                        }}
+                      >
                         Cancelar
                       </Button>
                     </div>

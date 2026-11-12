@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Laptop, Smartphone, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/demo")({
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/demo")({
 });
 
 type Role = "colaborador" | "gestor";
+type Device = "celular" | "web";
 
 const ROLES: { id: Role; label: string; descricao: string }[] = [
   {
@@ -24,8 +25,14 @@ const ROLES: { id: Role; label: string; descricao: string }[] = [
   },
 ];
 
+const DEVICES: { id: Device; label: string; icon: typeof Smartphone }[] = [
+  { id: "celular", label: "Celular", icon: Smartphone },
+  { id: "web", label: "Web", icon: Laptop },
+];
+
 function DemoShowcase() {
   const [role, setRole] = useState<Role>("colaborador");
+  const [device, setDevice] = useState<Device>("celular");
   const src = `/demo-login?role=${role}`;
 
   return (
@@ -46,18 +53,18 @@ function DemoShowcase() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1240px] px-5 py-8 sm:px-10">
+      <main className="mx-auto w-full max-w-[1240px] px-5 py-8 sm:px-10">
         <div className="mx-auto max-w-2xl text-center">
           <h1 className="text-2xl font-extrabold text-[#351526] sm:text-3xl">
             Navegue pela intranet Ken Taki
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-[#5f4d56] sm:text-base">
-            Escolha o acesso e veja as versões celular e web ao mesmo tempo. Tudo abaixo é navegável
-            — os dados de pessoas e conteúdo são fictícios, só para apresentação.
+            Escolha o acesso e o tamanho de tela. Tudo abaixo é navegável — os dados de pessoas e
+            conteúdo são fictícios, só para apresentação.
           </p>
         </div>
 
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           {ROLES.map((item) => (
             <button
               key={item.id}
@@ -76,54 +83,98 @@ function DemoShowcase() {
           {ROLES.find((item) => item.id === role)?.descricao}
         </p>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[320px_1fr] lg:items-start">
-          <div className="flex flex-col items-center">
-            <FrameLabel icon={<Smartphone className="h-4 w-4" />} label="Versão celular" />
-            <PhoneFrame src={src} roleKey={role} />
-          </div>
-          <div className="flex flex-col items-center">
-            <FrameLabel icon={<Laptop className="h-4 w-4" />} label="Versão web" />
-            <DesktopFrame src={src} roleKey={role} />
-          </div>
+        <div className="mt-5 flex justify-center gap-1 rounded-full bg-white p-1 shadow-sm ring-1 ring-[#6c2444]/10 mx-auto w-fit">
+          {DEVICES.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setDevice(item.id)}
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-colors ${
+                device === item.id ? "bg-[#6c2444] text-white" : "text-[#6c2444] hover:bg-[#f4e9ed]"
+              }`}
+            >
+              <item.icon className="h-3.5 w-3.5" />
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          {device === "celular" ? (
+            <PhoneFrame key={`phone-${role}`} src={src} />
+          ) : (
+            <DesktopFrame key={`web-${role}`} src={src} />
+          )}
         </div>
       </main>
     </div>
   );
 }
 
-function FrameLabel({ icon, label }: { icon: ReactNode; label: string }) {
-  return (
-    <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-bold text-[#6c2444] shadow-sm ring-1 ring-[#6c2444]/10">
-      {icon}
-      {label}
-    </div>
-  );
+function useContainerWidth() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width;
+      if (w) setWidth(w);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, width] as const;
 }
 
 const PHONE_W = 390;
 const PHONE_H = 844;
-const PHONE_SCALE = 0.82;
+const PHONE_MAX_RENDER_W = 380;
+const PHONE_BEZEL_SIDE = 10;
+const PHONE_BEZEL_TOP = 30;
+const PHONE_BEZEL_BOTTOM = 26;
 
-function PhoneFrame({ src, roleKey }: { src: string; roleKey: string }) {
+function PhoneFrame({ src }: { src: string }) {
+  const [containerRef, containerWidth] = useContainerWidth();
+  const available = containerWidth > 0 ? containerWidth : PHONE_MAX_RENDER_W;
+  const renderW = Math.min(PHONE_MAX_RENDER_W, available);
+  const scale = renderW / PHONE_W;
+
   return (
-    <div
-      className="overflow-hidden rounded-[2.4rem] border-[6px] border-[#1c1420] bg-[#1c1420] shadow-[0_24px_60px_-28px_rgba(53,21,38,0.55)]"
-      style={{ width: PHONE_W * PHONE_SCALE, height: PHONE_H * PHONE_SCALE }}
-    >
+    <div ref={containerRef} className="w-full max-w-[380px]">
       <div
+        className="mx-auto overflow-hidden rounded-[2.6rem] border-[6px] border-[#1c1420] bg-[#1c1420] shadow-[0_24px_60px_-28px_rgba(53,21,38,0.55)]"
         style={{
-          width: PHONE_W,
-          height: PHONE_H,
-          transform: `scale(${PHONE_SCALE})`,
-          transformOrigin: "top left",
+          width: PHONE_W * scale + PHONE_BEZEL_SIDE * 2,
+          height: PHONE_H * scale + PHONE_BEZEL_TOP + PHONE_BEZEL_BOTTOM,
         }}
       >
-        <iframe
-          key={roleKey}
-          src={src}
-          title="Pré-visualização celular"
-          style={{ width: PHONE_W, height: PHONE_H, border: 0, background: "#fff" }}
-        />
+        <div className="flex justify-center" style={{ height: PHONE_BEZEL_TOP }}>
+          <span className="mt-2 h-4 w-24 rounded-full bg-black/80" />
+        </div>
+        <div
+          className="overflow-hidden rounded-[1.4rem] bg-white"
+          style={{ width: PHONE_W * scale, height: PHONE_H * scale, marginLeft: PHONE_BEZEL_SIDE }}
+        >
+          <div
+            style={{
+              width: PHONE_W,
+              height: PHONE_H,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+            }}
+          >
+            <iframe
+              src={src}
+              title="Pré-visualização celular"
+              style={{ width: PHONE_W, height: PHONE_H, border: 0, background: "#fff" }}
+            />
+          </div>
+        </div>
+        <div className="flex justify-center" style={{ height: PHONE_BEZEL_BOTTOM }}>
+          <span className="mt-2 h-1 w-28 rounded-full bg-white/70" />
+        </div>
       </div>
     </div>
   );
@@ -132,41 +183,21 @@ function PhoneFrame({ src, roleKey }: { src: string; roleKey: string }) {
 const DESKTOP_W = 1360;
 const DESKTOP_H = 860;
 
-// O gestor demo compartilha uma única conta: se as duas telas pedirem acesso no
-// mesmo instante, o Supabase recusa a segunda tentativa (limite de segurança
-// contra pedidos repetidos). Atrasar a tela web evita essa corrida.
-const SECOND_FRAME_DELAY_MS = 700;
-
-function DesktopFrame({ src, roleKey }: { src: string; roleKey: string }) {
-  const boxRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const [readySrc, setReadySrc] = useState<string | null>(null);
-
-  useEffect(() => {
-    setReadySrc(null);
-    const timer = setTimeout(() => setReadySrc(src), SECOND_FRAME_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, [src, roleKey]);
-
-  useEffect(() => {
-    const box = boxRef.current;
-    if (!box) return;
-    const observer = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect.width ?? DESKTOP_W;
-      setScale(width / DESKTOP_W);
-    });
-    observer.observe(box);
-    return () => observer.disconnect();
-  }, []);
+function DesktopFrame({ src }: { src: string }) {
+  const [containerRef, containerWidth] = useContainerWidth();
+  const scale = containerWidth > 0 ? Math.min(1, containerWidth / DESKTOP_W) : 1;
 
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-[#6c2444]/15 bg-white shadow-[0_24px_60px_-28px_rgba(53,21,38,0.35)]">
+    <div
+      ref={containerRef}
+      className="w-full overflow-hidden rounded-xl border border-[#6c2444]/15 bg-white shadow-[0_24px_60px_-28px_rgba(53,21,38,0.35)]"
+    >
       <div className="flex items-center gap-1.5 border-b border-[#6c2444]/10 bg-[#f4e9ed] px-4 py-2.5">
         <span className="h-2.5 w-2.5 rounded-full bg-[#e3a9bb]" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#e9c5d5]" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#f3dbe4]" />
       </div>
-      <div ref={boxRef} className="w-full overflow-hidden" style={{ height: DESKTOP_H * scale }}>
+      <div className="w-full overflow-hidden" style={{ height: DESKTOP_H * scale }}>
         <div
           style={{
             width: DESKTOP_W,
@@ -175,21 +206,11 @@ function DesktopFrame({ src, roleKey }: { src: string; roleKey: string }) {
             transformOrigin: "top left",
           }}
         >
-          {readySrc ? (
-            <iframe
-              key={roleKey}
-              src={readySrc}
-              title="Pré-visualização web"
-              style={{ width: DESKTOP_W, height: DESKTOP_H, border: 0, background: "#fff" }}
-            />
-          ) : (
-            <div
-              style={{ width: DESKTOP_W, height: DESKTOP_H }}
-              className="flex items-center justify-center text-sm font-semibold text-[#6c2444]"
-            >
-              Abrindo ambiente de demonstração…
-            </div>
-          )}
+          <iframe
+            src={src}
+            title="Pré-visualização web"
+            style={{ width: DESKTOP_W, height: DESKTOP_H, border: 0, background: "#fff" }}
+          />
         </div>
       </div>
     </div>
