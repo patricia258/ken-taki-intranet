@@ -11,7 +11,12 @@ export const notificarAcessoDemoFn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const resendKey = process.env["RESEND_API_KEY"];
     const notifyEmail = process.env["DEMO_NOTIFY_EMAIL"];
-    if (!resendKey || !notifyEmail) return { sent: false as const };
+    if (!resendKey || !notifyEmail) {
+      return {
+        sent: false as const,
+        debug: `faltando env: ${!resendKey ? "RESEND_API_KEY " : ""}${!notifyEmail ? "DEMO_NOTIFY_EMAIL" : ""}`.trim(),
+      };
+    }
 
     const referer = getRequestHeader("referer") || "(direto, sem referência)";
     const userAgent = getRequestHeader("user-agent") || "(desconhecido)";
@@ -42,8 +47,14 @@ export const notificarAcessoDemoFn = createServerFn({ method: "POST" })
           </div>`,
         }),
       });
-      return { sent: response.ok };
-    } catch {
-      return { sent: false as const };
+      if (!response.ok) {
+        const detail = await response.text().catch(() => "");
+        console.error("[demo-track] resend falhou", response.status, detail);
+        return { sent: false as const, debug: `status ${response.status}: ${detail}` };
+      }
+      return { sent: true as const };
+    } catch (error) {
+      console.error("[demo-track] erro de rede", error);
+      return { sent: false as const, debug: (error as Error).message };
     }
   });
