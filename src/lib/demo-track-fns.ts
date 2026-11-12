@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
-import { BRAND } from "./brand";
 
 // Avisa por e-mail quando alguém abre a vitrine pública /demo. Não depende de
 // nenhuma tabela nova — se RESEND_API_KEY ou DEMO_NOTIFY_EMAIL não estiverem
@@ -31,7 +30,9 @@ export const notificarAcessoDemoFn = createServerFn({ method: "POST" })
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: BRAND.emailFrom,
+          // Remetente de testes do Resend: não exige domínio verificado.
+          // Isso é só um aviso interno para você, não um e-mail de produto.
+          from: "Ken Taki Demo <onboarding@resend.dev>",
           to: [notifyEmail],
           subject: `Demo Ken Taki acessada agora (${data.role})`,
           html: `<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto">

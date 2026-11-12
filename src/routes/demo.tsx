@@ -39,14 +39,10 @@ function DemoShowcase() {
   const [device, setDevice] = useState<Device>("celular");
   const src = `/demo-login?role=${role}`;
 
-  const [notifyDebug, setNotifyDebug] = useState<string | null>(null);
-
   useEffect(() => {
-    notificarAcessoDemoFn({
+    void notificarAcessoDemoFn({
       data: { role, path: typeof window !== "undefined" ? window.location.href : "/demo" },
-    })
-      .then((result) => setNotifyDebug(JSON.stringify(result)))
-      .catch((error) => setNotifyDebug(`erro: ${(error as Error).message}`));
+    }).catch(() => undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -66,11 +62,6 @@ function DemoShowcase() {
             Ambiente de demonstração · dados fictícios
           </span>
         </div>
-        {notifyDebug ? (
-          <p className="mx-auto mt-2 max-w-[1240px] break-all text-[10px] text-white/40">
-            debug-notify: {notifyDebug}
-          </p>
-        ) : null}
       </header>
 
       <main className="mx-auto w-full max-w-[1240px] px-5 py-8 sm:px-10">
