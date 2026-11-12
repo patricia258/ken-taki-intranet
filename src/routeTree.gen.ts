@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AzumiRouteImport } from './routes/azumi'
 import { Route as ColaboradorRouteImport } from './routes/colaborador'
+import { Route as DemoRouteImport } from './routes/demo'
+import { Route as DemoLoginRouteImport } from './routes/demo-login'
 import { Route as GestorRouteImport } from './routes/gestor'
 import { Route as PainelRouteImport } from './routes/painel'
 
@@ -36,6 +38,16 @@ const ColaboradorRoute = ColaboradorRouteImport.update({
   path: '/colaborador',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoRoute = DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoLoginRoute = DemoLoginRouteImport.update({
+  id: '/demo-login',
+  path: '/demo-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GestorRoute = GestorRouteImport.update({
   id: '/gestor',
   path: '/gestor',
@@ -52,6 +64,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/azumi': typeof AzumiRoute
   '/colaborador': typeof ColaboradorRoute
+  '/demo': typeof DemoRoute
+  '/demo-login': typeof DemoLoginRoute
   '/gestor': typeof GestorRoute
   '/painel': typeof PainelRoute
 }
@@ -60,6 +74,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/azumi': typeof AzumiRoute
   '/colaborador': typeof ColaboradorRoute
+  '/demo': typeof DemoRoute
+  '/demo-login': typeof DemoLoginRoute
   '/gestor': typeof GestorRoute
   '/painel': typeof PainelRoute
 }
@@ -69,20 +85,40 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/azumi': typeof AzumiRoute
   '/colaborador': typeof ColaboradorRoute
+  '/demo': typeof DemoRoute
+  '/demo-login': typeof DemoLoginRoute
   '/gestor': typeof GestorRoute
   '/painel': typeof PainelRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/azumi' | '/colaborador' | '/gestor' | '/painel'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/azumi'
+    | '/colaborador'
+    | '/demo'
+    | '/demo-login'
+    | '/gestor'
+    | '/painel'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/azumi' | '/colaborador' | '/gestor' | '/painel'
+  to:
+    | '/'
+    | '/auth'
+    | '/azumi'
+    | '/colaborador'
+    | '/demo'
+    | '/demo-login'
+    | '/gestor'
+    | '/painel'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/azumi'
     | '/colaborador'
+    | '/demo'
+    | '/demo-login'
     | '/gestor'
     | '/painel'
   fileRoutesById: FileRoutesById
@@ -92,6 +128,8 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   AzumiRoute: typeof AzumiRoute
   ColaboradorRoute: typeof ColaboradorRoute
+  DemoRoute: typeof DemoRoute
+  DemoLoginRoute: typeof DemoLoginRoute
   GestorRoute: typeof GestorRoute
   PainelRoute: typeof PainelRoute
 }
@@ -126,6 +164,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ColaboradorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo-login': {
+      id: '/demo-login'
+      path: '/demo-login'
+      fullPath: '/demo-login'
+      preLoaderRoute: typeof DemoLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gestor': {
       id: '/gestor'
       path: '/gestor'
@@ -148,6 +200,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   AzumiRoute: AzumiRoute,
   ColaboradorRoute: ColaboradorRoute,
+  DemoRoute: DemoRoute,
+  DemoLoginRoute: DemoLoginRoute,
   GestorRoute: GestorRoute,
   PainelRoute: PainelRoute,
 }
