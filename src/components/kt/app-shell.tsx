@@ -5,14 +5,11 @@ import {
   FileText,
   HeartHandshake,
   LogOut,
-  Mail,
   Megaphone,
-  MessageCircle,
   MessagesSquare,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useAdminPermissions, type AdminSection } from "@/lib/admin-permissions";
-import { AZUMI_CONTACT } from "@/lib/kt-data";
 import { useSession } from "@/lib/kt-store";
 import { BRAND } from "@/lib/brand";
 import { Button } from "@/components/ui/button";
@@ -118,14 +115,6 @@ export function Brand({ size = "sm" }: { size?: "sm" | "lg" }) {
         {BRAND.product}
       </span>
     </span>
-  );
-}
-
-function FooterLink({ href, children }: { href: string; children: ReactNode }) {
-  return (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground">
-      {children}
-    </a>
   );
 }
 
@@ -292,7 +281,7 @@ export function AppShell({ children, back, onExit, onLogout }: { children: React
       <footer className={`mt-8 border-t border-border bg-card/70 ${employeeWorkspace ? "hidden sm:block" : ""}`}>
         <div className="app-container flex flex-col gap-4 py-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="grid gap-2"><Brand /><p className="max-w-xl text-xs leading-relaxed text-muted-foreground">Canal interno de pessoas, comunicação e documentos do Ken Taki.</p></div>
-          <div className="flex flex-col gap-2 sm:items-end"><div className="flex flex-wrap gap-x-4 gap-y-2"><FooterLink href={`https://wa.me/${AZUMI_CONTACT.whatsapp}`}><MessageCircle className="h-3.5 w-3.5" /> Suporte de RH</FooterLink><FooterLink href={`mailto:${AZUMI_CONTACT.email}`}><Mail className="h-3.5 w-3.5" /> E-mail</FooterLink></div><p className="text-[11px] text-muted-foreground sm:text-right">{BRAND.footerCredit}</p></div>
+          <div className="flex flex-col gap-2 sm:items-end"><p className="text-[11px] text-muted-foreground sm:text-right">{BRAND.footerCredit}</p></div>
         </div>
       </footer>
     </div>

@@ -2,7 +2,6 @@ import {
   Check,
   HandHeart,
   HeartHandshake,
-  MessageCircle,
   Plus,
   ShieldCheck,
   UserRound,
@@ -20,7 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { AZUMI_CONTACT, HUMORES, filialNome } from "@/lib/kt-data";
+import { HUMORES, filialNome } from "@/lib/kt-data";
 import { readEmployeeAccess } from "@/lib/employee-session";
 import { supabase } from "@/lib/supabase";
 import { uid, useCheckins, type Session } from "@/lib/kt-store";
@@ -549,16 +548,6 @@ export function CheckIn({ session }: { session: Extract<Session, { tipo: "colabo
                     : "Sua liderança recebeu o pedido e o RH acompanha o registro institucional."}
                 </p>
                 <p className="mt-2 text-[11px] font-semibold text-muted-foreground">Protocolo: {support.protocol}</p>
-                {support.destination === "rh" ? (
-                  <a
-                    href={`https://wa.me/${AZUMI_CONTACT.whatsapp}?text=${encodeURIComponent(`Olá, sou ${session.nome} do Ken Taki ${filialNome(session.filial)}. Registrei o protocolo ${support.protocol} na intranet e gostaria de conversar com o RH.`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-md border border-success/25 bg-card px-3 text-xs font-semibold text-success hover:bg-success-soft"
-                  >
-                    <MessageCircle className="h-3.5 w-3.5" /> Abrir WhatsApp do RH
-                  </a>
-                ) : null}
               </div>
             ) : null}
 

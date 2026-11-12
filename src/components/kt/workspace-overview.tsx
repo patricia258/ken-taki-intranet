@@ -1,6 +1,5 @@
 import {
   AlertTriangle,
-  BriefcaseBusiness,
   Building2,
   CheckCircle2,
   FileCheck2,
@@ -269,14 +268,6 @@ export function WorkspaceOverview({ mode }: { mode: Mode }) {
               >
                 <HeartHandshake className="h-4 w-4" /> Falar com RH
               </button>
-              <a
-                href="https://portal.azumirh.com.br/vaga"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-border bg-card px-4 text-xs font-bold text-foreground hover:bg-muted"
-              >
-                <BriefcaseBusiness className="h-4 w-4" /> Solicitar vaga
-              </a>
             </div>
           </div>
         </div>

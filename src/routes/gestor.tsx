@@ -2,15 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import {
-  Briefcase,
-  Check,
-  ExternalLink,
-  MessageCircle,
-  Upload,
-  UserMinus,
-  UserPlus,
-} from "lucide-react";
+import { Check, ExternalLink, Upload, UserMinus, UserPlus } from "lucide-react";
 import capaPadrao from "@/assets/capa-padrao-politicas.jpg";
 import { AppShell, BackLink } from "@/components/kt/app-shell";
 import { Avatar, EmptyState, Section } from "@/components/kt/section";
@@ -28,7 +20,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  AZUMI_CONTACT,
   FILIAIS,
   HUMORES,
   filialNome,
@@ -581,48 +572,6 @@ function PainelGestor({ perfil, onLogout }: { perfil: KtPerfil; onLogout: () => 
               <p className="mt-1 text-sm text-muted-foreground">{k.label}</p>
             </div>
           ))}
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <a
-            href="https://portal.azumirh.com.br/vaga"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-3 rounded-2xl bg-kt px-5 py-4 text-primary-foreground transition-colors hover:bg-kt/90"
-          >
-            <Briefcase className="h-5 w-5 shrink-0" />
-            <div>
-              <p className="font-bold">Solicitar vaga</p>
-              <p className="text-xs font-normal opacity-80">Abrir portal de vagas Cali RH</p>
-            </div>
-          </a>
-
-          <a
-            href={`https://wa.me/${AZUMI_CONTACT.whatsapp}?text=${encodeURIComponent(`Olá, sou ${session.nome}, gestor(a) da unidade ${filialNome(session.filial)}. Gostaria de falar com o consultor Cali RH.`)}`}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() =>
-              setAjuda([
-                ...ajuda,
-                {
-                  id: uid(),
-                  nome: session.nome,
-                  filial: session.filial,
-                  assunto: "whatsapp-gestor",
-                  ts: Date.now(),
-                },
-              ])
-            }
-            className="flex items-center gap-3 rounded-2xl border border-border bg-card px-5 py-4 text-sm transition-colors hover:bg-muted"
-          >
-            <MessageCircle className="h-5 w-5 shrink-0 text-success" />
-            <div>
-              <p className="font-bold">Fale com o consultor Cali RH</p>
-              <p className="text-xs text-muted-foreground">
-                {AZUMI_CONTACT.whatsappLabel} · WhatsApp
-              </p>
-            </div>
-          </a>
         </div>
 
         {/* Clima — gráfico + resumo */}
