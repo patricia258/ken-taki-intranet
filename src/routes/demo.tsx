@@ -132,9 +132,21 @@ function PhoneFrame({ src, roleKey }: { src: string; roleKey: string }) {
 const DESKTOP_W = 1360;
 const DESKTOP_H = 860;
 
+// O gestor demo compartilha uma única conta: se as duas telas pedirem acesso no
+// mesmo instante, o Supabase recusa a segunda tentativa (limite de segurança
+// contra pedidos repetidos). Atrasar a tela web evita essa corrida.
+const SECOND_FRAME_DELAY_MS = 700;
+
 function DesktopFrame({ src, roleKey }: { src: string; roleKey: string }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [readySrc, setReadySrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    setReadySrc(null);
+    const timer = setTimeout(() => setReadySrc(src), SECOND_FRAME_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [src, roleKey]);
 
   useEffect(() => {
     const box = boxRef.current;
@@ -163,12 +175,21 @@ function DesktopFrame({ src, roleKey }: { src: string; roleKey: string }) {
             transformOrigin: "top left",
           }}
         >
-          <iframe
-            key={roleKey}
-            src={src}
-            title="Pré-visualização web"
-            style={{ width: DESKTOP_W, height: DESKTOP_H, border: 0, background: "#fff" }}
-          />
+          {readySrc ? (
+            <iframe
+              key={roleKey}
+              src={readySrc}
+              title="Pré-visualização web"
+              style={{ width: DESKTOP_W, height: DESKTOP_H, border: 0, background: "#fff" }}
+            />
+          ) : (
+            <div
+              style={{ width: DESKTOP_W, height: DESKTOP_H }}
+              className="flex items-center justify-center text-sm font-semibold text-[#6c2444]"
+            >
+              Abrindo ambiente de demonstração…
+            </div>
+          )}
         </div>
       </div>
     </div>

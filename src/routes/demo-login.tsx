@@ -58,8 +58,16 @@ function DemoLogin() {
       if (active) navigate({ to: "/gestor", replace: true });
     }
 
-    (role === "gestor" ? entrarGestor() : entrarColaborador()).catch(() => {
-      if (active) setErro("Não foi possível abrir o ambiente de demonstração agora.");
+    const tentar = () => (role === "gestor" ? entrarGestor() : entrarColaborador());
+
+    tentar().catch(async () => {
+      // Uma colisão passageira (ex.: duas telas pedindo acesso no mesmo instante)
+      // costuma resolver sozinha numa segunda tentativa.
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      if (!active) return;
+      tentar().catch(() => {
+        if (active) setErro("Não foi possível abrir o ambiente de demonstração agora.");
+      });
     });
 
     return () => {
